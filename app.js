@@ -44,7 +44,7 @@ var nextWord = function(word, callback) {
                 for (var i in data) {
                     sum += data[i];
                 }
-                var rand = Math.floor(Math.random()*sum+1);
+                var rand = Math.floor(Math.random() * sum + 1);
                 var partial_sum = 0;
                 var next = null;
                 for (i in data) {
@@ -57,21 +57,29 @@ var nextWord = function(word, callback) {
     });
 };
 
-var randomSentance = function(callback) {
-  var sentance = '';
+var capitalizeFirstLetter = function(string) {
+  var s = string.split(' ');
+  s.splice(0, 1);
+  var sentence = s.join(' ');
+  return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+};
+
+var randomsentence = function(callback) {
+  var sentence = '';
 
   randomWord(function(word) {
-    sentance += word;
+    sentence += word;
 
     function build(next) {
-      sentance += ' ' + next;
-
-      if (/(\.|!|\?)/.exec(sentance)) {
-        sys.puts(sentance);
+      sentence += ' ' + next;
+    
+      if (/(\.|!|\?)/.exec(sentence) || sentence.length >= 140) {
+        //sentence.split(' ').splice(1, 1);
+        sys.puts(capitalizeFirstLetter(sentence));
         client.quit();
       } else {
         nextWord(next, build);
-        console.log(sentance);
+        //console.log(sentence);
       }
     }
 
@@ -83,7 +91,7 @@ var randomSentance = function(callback) {
 if (process.argv[2] == 'init') {
     init();
 } else {
-    randomSentance();
+    randomsentence();
 }
 
 
